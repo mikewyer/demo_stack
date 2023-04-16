@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demostack-frontendsvc
+  labels:
+    app: demostack-svc
+    release: kps
+spec:
+  selector:
+    app: demostack
+  ports:
+    - name: http-metrics
+      port: 9000

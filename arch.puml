@@ -1,0 +1,31 @@
+@startuml System Architecture
+
+cloud "AWS/GCP/Azure" as CLOUD {
+    stack namespace {
+        node Grafana
+        node Prometheus
+        node Jaeger
+        Grafana --> Prometheus
+        node FrontEnd
+        Prometheus -> FrontEnd
+        node MemCache
+        FrontEnd --> MemCache
+        Prometheus -> MemCache
+        node BackEnd
+        FrontEnd ---> BackEnd
+        Prometheus -> BackEnd
+        database Storage
+        Prometheus -> Storage
+        BackEnd --> Storage
+        database Traces
+        BackEnd --> Traces
+        FrontEnd ---> Traces
+        Jaeger <---- Traces
+    }
+}
+actor User
+User ---> FrontEnd
+actor SRE
+SRE --> Grafana
+SRE --> Jaeger
+@enduml

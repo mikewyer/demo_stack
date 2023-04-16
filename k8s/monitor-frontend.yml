@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: demostack-frontend-mtr
+  labels:
+    team: frontend
+    release: kps
+spec:
+  selector:
+    matchLabels:
+      app: demostack-svc
+  endpoints:
+    - port: http-metrics

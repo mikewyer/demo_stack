@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demostack-frontend
+  labels:
+    release: "kps"
+    app: "demostack"
+
+spec:
+  containers:
+    - name: frontend-app
+      image: mikewyer/demo_stack:latest
+      imagePullPolicy: Never
+      ports:
+        - containerPort: 8082
+          name: "web"
+        - containerPort: 9000
+          name: "http-metrics"
+      resources:
+        limits:
+          cpu: "1"
+          memory: "300Mi"

@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "demostack"
+version = "0.1.0"
+description = "Demo Tech Stack for trying stuff out"
+authors = ["Mike Wyer <mike@wyer.org>"]
+license = "Restricted"
+readme = "README.md"
+
+packages = [
+    { include = "frontend"},
+]
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.3"
+opentelemetry-sdk = "^1.17.0"
+opentelemetry-instrumentation-flask = "^0.38b0"
+requests = "^2.28.2"
+opentelemetry-exporter-prometheus = "^1.12.0rc1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pytest = "^7.3.1"
+pytest-xdist = "^3.2.1"
+mypy = "^1.2.0"
+prospector = "^1.9.0"
+opentelemetry-distro = "^0.38b0"
+
+[tool.poetry.scripts]
+frontend = 'frontend.app:run'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# pytest.ini
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:pkg_resources is deprecated as an API:DeprecationWarning"
+]
