@@ -4,29 +4,36 @@
 skinparam backgroundColor #EEEBDC
 
 cloud "AWS/GCP/Azure" as CLOUD {
-    node Grafana
-    node Prometheus
-    node Jaeger
+    node Grafana #green
+    node Prometheus #green
+    node Jaeger #purple
+    node "Index/Query" as log_index
     Grafana --> Prometheus
-    node FrontEnd
-    Prometheus -> FrontEnd
-    node MemCache
-    FrontEnd --> MemCache
-    Prometheus -> MemCache
-    node BackEnd
-    FrontEnd ---> BackEnd
-    Prometheus -> BackEnd
-    database Storage
-    Prometheus -> Storage
-    BackEnd --> Storage
-    database Traces
-    BackEnd --> Traces
-    FrontEnd ---> Traces
-    Jaeger <---- Traces
+    node FrontEnd #red
+    Prometheus -[#green]> FrontEnd
+    node MemCache #red
+    FrontEnd -[#red]-> MemCache
+    Prometheus -[#green]> MemCache
+    node BackEnd #red
+    FrontEnd -[#red]-> BackEnd
+    Prometheus -[#green]> BackEnd
+    database Storage #red
+    Prometheus -[#green]> Storage
+    BackEnd -[#red]-> Storage
+    database Traces #purple
+    BackEnd -[#purple]-> Traces
+    FrontEnd -[#purple]--> Traces
+    Jaeger <-[#purple]--- Traces
+    database Logs #gray
+    FrontEnd -[#gray]--> Logs
+    BackEnd -[#gray]-> Logs
+    MemCache -[#gray]-> Logs
+    log_index <-[#gray]--- Logs
 }
-actor User
-User ---> FrontEnd
+actor User #red
+User -[#red]--> FrontEnd
 actor SRE
 SRE --> Grafana
 SRE --> Jaeger
+SRE --> log_index
 @enduml
