@@ -21,6 +21,7 @@ resource "google_container_cluster" "primary" {
   network    = google_compute_network.vpc.name
   subnetwork = google_compute_subnetwork.subnet.name
 
+  # Follow the GCP recommendation to use VPC-Native networking
   ip_allocation_policy {
     cluster_secondary_range_name  = "pod-ranges"
     services_secondary_range_name = "services-range"
@@ -31,11 +32,14 @@ resource "google_container_cluster" "primary" {
 
 # Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
-  name              = google_container_cluster.primary.name
-  location          = var.region
-  cluster           = google_container_cluster.primary.name
-  node_count        = var.gke_num_nodes
-  max_pods_per_node = 20 # Limit IP address usage for now.
+  name       = google_container_cluster.primary.name
+  location   = var.region
+  cluster    = google_container_cluster.primary.name
+  node_count = var.gke_num_nodes
+  # Limit IP address usage for now. If max_pods_per_node is too high,
+  # (eg the default of 100+) we use up all the space in the pod-ranges
+  # IP allocation and the cluster won't start.
+  max_pods_per_node = 20
 
   node_config {
     oauth_scopes = [
@@ -47,8 +51,17 @@ resource "google_container_node_pool" "primary_nodes" {
       env = var.project_id
     }
 
-    preemptible     = true
-    machine_type    = "e2-standard-2"
+    # Get a discount by allowing nodes to be yanked by GCE at a moment's notice.
+    preemptible = true
+    # Make sure we use a machine type which is available in the target cluster.
+    machine_type = "e2-standard-2"
+    # Amusingly, the default example provided by hashicorp for using terraform
+    # with GKE exceeds available SSD quota on a trial account.
+    # I got this running by specifying a non-SSD disk_type and limiting disk
+    # size to 50GB. Since it can take 30+ mins (the timeout is 40 mins) for the
+    # process to try and then not succeed (without helpfully failing early to
+    # tell you to get more quota), I've stuck with the working combo.
+    # In a real cluster, I'd make this more deterministic.
     disk_type       = "pd-standard"
     local_ssd_count = 0
     disk_size_gb    = 50
