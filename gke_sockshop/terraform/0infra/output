@@ -1,0 +1,4 @@
+kubernetes_cluster_host = "35.228.71.3"
+kubernetes_cluster_name = "lets-get-it-started-384609-gke"
+project_id = "lets-get-it-started-384609"
+region = "europe-north1"
