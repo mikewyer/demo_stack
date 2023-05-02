@@ -3,14 +3,14 @@ kind: Pod
 metadata:
   name: demostack-frontend
   labels:
-    release: "kps"
+    release: "prometheus"
     app: "demostack"
 
 spec:
   containers:
     - name: frontend-app
-      image: mikewyer/demo_stack:latest
-      imagePullPolicy: Never
+      image: europe-north1-docker.pkg.dev/lets-get-it-started-384609/demostack/frontend:latest
+      imagePullPolicy: Always
       ports:
         - containerPort: 8082
           name: "web"
