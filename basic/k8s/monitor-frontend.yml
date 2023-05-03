@@ -1,13 +1,14 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: demostack-frontend-mtr
+  name: cartvalue
+  namespace: mon
   labels:
     team: frontend
-    release: kps
+    release: prometheus
 spec:
   selector:
     matchLabels:
-      app: demostack-svc
+      app: demostack
   endpoints:
     - port: http-metrics

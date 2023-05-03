@@ -226,8 +226,10 @@ def server_request() -> str:
 def run():
     """Sets up otel and starts the server"""
     configure_otel()
+    # In a real situation, I'd make the app take port numbers and host names
+    # as flags or environment variables to make them easier to change.
     # Start *prometheus* server:
-    start_prom_server(port=9000, addr="localhost")
+    start_prom_server(9000)
     CartValueChecker().start()
     # Start main app
     app.run(port=8082)

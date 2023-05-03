@@ -1,13 +1,15 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: demostack-frontendsvc
+  name: cartvalue
+  namespace: mon
   labels:
-    app: demostack-svc
-    release: kps
+    app: demostack
+    release: prometheus
 spec:
   selector:
     app: demostack
   ports:
     - name: http-metrics
       port: 9000
+      targetPort: 9000

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: demostack-frontend
+  namespace: mon
   labels:
     release: "prometheus"
     app: "demostack"
